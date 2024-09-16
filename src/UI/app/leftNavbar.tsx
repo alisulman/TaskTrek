@@ -30,12 +30,11 @@ const OneLefter = () => {
             dispatch(fetchLists())
         }
     }, [])
-    console.log(data)
     return (
-        <div className={`hidden md:block navbar-start bg-primary-content w-full rounded-xl`}>
+        <div className={`navbar-start bg-primary-content w-full rounded-xl`}>
             {data.length === 0 ? (
                 <div className="space-y-3 p-4">
-                        <Skeleton amount={5} />
+                    <Skeleton amount={5} />
                 </div>
             ) : (
                 <ul className="space-y-3 p-4">
@@ -80,6 +79,7 @@ export default function LeftNavbar() {
     const stateApp = useSelector((state: RootState) => state.APP)
     const stateList = useSelector((state: RootState) => state.LIST)
     const showInputCheck = stateApp.showInputCheck
+    const showLeft = stateApp.showLeft
     const data = stateList.data
     const dispatch = useDispatch<AppDispatch>()
 
@@ -105,8 +105,8 @@ export default function LeftNavbar() {
     return (
         <>
 
-            <nav className="flex w-80 h-svh border-2 p-5">
-                <div className="flex flex-col flex-grow space-y-4">
+            <nav className={`${!showLeft ? "hidden" : "flex"} md:flex h-[90vh] border-2 p-5 md:w-80 md:h-svh`}>
+                <div className="flex flex-col flex-grow space-y-3 md:space-y-4">
                     <h1 className={`${PG.className} antialiased hidden text-center md:block bg-base-200 text-4xl rounded-lg py-3`}>
                         TaskTrek
                     </h1>

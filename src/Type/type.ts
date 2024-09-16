@@ -5,6 +5,11 @@ export interface AppSliceInitialStateType {
     isError: string | null
     activeSet: string
     showInputCheck: boolean
+    showLeft: boolean
+    showRight: boolean
+    currentMonth: number
+    currentYear: number
+    selected: number
 }
 
 export interface ListSliceInitialStateType {

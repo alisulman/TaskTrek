@@ -2,6 +2,7 @@
 import Store from "@/redux/store";
 import LeftNavbar from "@/UI/app/leftNavbar";
 import Navbar from "@/UI/app/navbar";
+import RightNavbar from "@/UI/app/rightNavbar";
 import { poppins } from "@/UI/fonts";
 import React from "react";
 import { Provider } from "react-redux";
@@ -15,6 +16,7 @@ export default function Layout(
                 <Navbar className="md:hidden" />
                 <LeftNavbar />
                 <div>{children}</div>
+                <RightNavbar />
             </header>
         </Provider>
     )

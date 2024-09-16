@@ -1,15 +1,33 @@
 import { VscLayoutSidebarLeft, VscLayoutSidebarLeftOff } from "react-icons/vsc";
 import { PG } from "../fonts";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { setShowLeft, setShowRight } from "@/redux/slice/slice.app";
 
 export default function Navbar(
-    {className = ""}: {className?: string}
+    { className }: { className?: string }
 ) {
-    const [showLeft, setShowLeft] = useState<boolean>(false);
-    const [showRight, setShowRight] = useState<boolean>(false);
+    const state = useSelector((state: RootState) => state.APP)
+    const showLeft = state.showLeft
+    const showRight = state.showRight
+    const dispatch = useDispatch<AppDispatch>()
 
-    const handleLeftPanal = () => setShowLeft(!showLeft)
-    const handleRightPanal = () => setShowRight(!showRight)
+    const handleLeftPanal = () => {
+        if (!showRight) {
+            dispatch(setShowLeft(!showLeft))
+        } else {
+            dispatch(setShowLeft(!showLeft))
+            dispatch(setShowRight(!showRight))
+        }
+    }
+    const handleRightPanal = () => {
+        if (!showLeft) {
+            dispatch(setShowRight(!showRight))
+        } else {
+            dispatch(setShowRight(!showRight))
+            dispatch(setShowLeft(!showLeft))
+        }
+    }
 
     return (
         <nav className={`navbar bg-primary-content flex justify-between items-center ${className}`}>
