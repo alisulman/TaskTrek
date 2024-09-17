@@ -10,6 +10,11 @@ export interface AppSliceInitialStateType {
     currentMonth: number
     currentYear: number
     selected: number
+    time: string | ""
+    timePeriod: string | ""
+    weekDay: string | ""
+    monthName: string | ""
+    date: string | ""
 }
 
 export interface ListSliceInitialStateType {

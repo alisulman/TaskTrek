@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components{
-    body{
-        @apply overflow-hidden 
+@layer components {
+    body {
+        @apply overflow-hidden
     }
 }

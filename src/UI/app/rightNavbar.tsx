@@ -93,12 +93,12 @@ const Calender = () => {
 
 export default function RightNavbar() {
 
-    const monthNames: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
     const state = useSelector((state: RootState) => state.APP)
-    const selected = state.selected
     const currentMonth = state.currentMonth
     const currentYear = state.currentYear
+    const month = state.monthName
+    const open = state.showRight
     const dispatch = useDispatch<AppDispatch>()
 
     const handleClick = (click: "next" | "prev") => {
@@ -122,14 +122,14 @@ export default function RightNavbar() {
         }
     }
     return (
-        <nav className="flex flex-col items-center gap-3 border-2 md:w-96 md:h-svh p-5">
+        <nav className={`${!open ? "hidden" : "flex"} absolute md:static top-16 md:flex flex-col items-center gap-3 h-[90vh] md:w-96 md:h-svh p-5 bg-base-100`}>
             <div className="flex items-center justify-center bg-base-200 w-full rounded-xl py-3">
                 <FaCaretLeft
                     className="text-2xl cursor-pointer"
                     onClick={() => handleClick("prev")}
                 />
                 <div className="flex flex-col items-center w-32 select-none">
-                    <span>{monthNames[currentMonth]}</span>
+                    <span>{month}</span>
                     <span className="text-sm">{currentYear}</span>
                 </div>
                 <FaCaretRight

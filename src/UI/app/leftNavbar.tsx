@@ -37,7 +37,7 @@ const OneLefter = () => {
                     <Skeleton amount={5} />
                 </div>
             ) : (
-                <ul className="space-y-3 p-4">
+                <ul className={`md:h-[17rem] scrollbar space-y-3 p-4 ${data.length >= 5 && "overflow-y-auto"}`}>
                     {data.map((data: ListModelFullType) => (
                         <li
                             key={data._id}
@@ -105,7 +105,7 @@ export default function LeftNavbar() {
     return (
         <>
 
-            <nav className={`${!showLeft ? "hidden" : "flex"} md:flex h-[90vh] border-2 p-5 md:w-80 md:h-svh`}>
+            <nav className={`${!showLeft ? "hidden" : "flex"} md:flex h-[90vh] p-5 md:w-80 md:h-svh`}>
                 <div className="flex flex-col flex-grow space-y-3 md:space-y-4">
                     <h1 className={`${PG.className} antialiased hidden text-center md:block bg-base-200 text-4xl rounded-lg py-3`}>
                         TaskTrek
