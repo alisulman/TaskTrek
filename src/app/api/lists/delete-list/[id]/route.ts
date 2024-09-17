@@ -1,9 +1,9 @@
 import dbConnect from "@/lib/dbConnect";
 import MyList from "@/models/myLists.model";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const DELETE = async (
-    req: Request,
+    req: NextRequest,
     { params }: { params: { id: string } }
 ) => {
     await dbConnect("Delete List");
@@ -21,8 +21,7 @@ export const DELETE = async (
     }
 
     try {
-        const findByIdList = await MyList.findOne({ _id: id, listType: "Temporary" });
-
+        const findByIdList = await MyList.findOne({ _id: id, listType: "temporary" });
         if (!findByIdList) {
             return NextResponse.json(
                 {

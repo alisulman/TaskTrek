@@ -37,7 +37,7 @@ const OneLefter = () => {
                     <Skeleton amount={5} />
                 </div>
             ) : (
-                <ul className={`md:h-[17rem] scrollbar space-y-3 p-4 ${data.length >= 5 && "overflow-y-auto"}`}>
+                <ul className={`space-y-3 p-4 ${data.length > 5 && "overflow-y-auto md:h-[17rem]"}`}>
                     {data.map((data: ListModelFullType) => (
                         <li
                             key={data._id}

@@ -36,7 +36,49 @@ export const addList = (name: string, data: ListModelFullType[]) => async (dispa
         const dataList = response.data.data
         dispatch(setListData([...data, dataList]))
         setCookie("Run", true, 1, "/application")
-        setCookie("AllLists", [...data, dataList], 30, "/application")
+        setCookie("lists", [...data, dataList], 30, "/application")
+    } catch (error: any) {
+        if (axios.isAxiosError(error)) {
+            const errorMessage = error.response?.data?.message || "An error occurred";
+            dispatch(setError(errorMessage));
+        } else {
+            dispatch(setError(error.message || "An unknown error occurred."));
+        }
+    }
+}
+
+export const deleteList = (name: string, data: ListModelFullType[]) => async (dispatch: AppDispatch) => {
+    dispatch(setLoading())
+    const dataForId = data.find(val => val.listName === name)
+    const id = dataForId?._id
+    const deletedData: ListModelFullType[] = data.filter(list => list._id !== id)
+
+    try {
+        dispatch(setListData(deletedData))
+        await axios.delete(`/api/lists/delete-list/${id}`)
+        setCookie("Run", true, 1, "/application")
+        setCookie("lists", deletedData, 30, "/application")
+    } catch (error: any) {
+        if (axios.isAxiosError(error)) {
+            const errorMessage = error.response?.data?.message || "An error occurred";
+            dispatch(setError(errorMessage));
+        } else {
+            dispatch(setError(error.message || "An unknown error occurred."));
+        }
+    }
+}
+
+export const updateList = (prevname: string, name: string, data: ListModelFullType[]) => async (dispatch: AppDispatch) => {
+    dispatch(setLoading())
+    const dataForId = data.find(val => val.listName === prevname)
+    const id = dataForId?._id
+
+    try {
+        const response = await axios.put(`/api/lists/update-list/${id}`, { name })
+        const dataList = response.data.data
+        const updateData = data.map(list => list._id === id ? dataList : list)
+        dispatch(setListData(updateData))
+        setCookie("lists", updateData, 30, "/application")
     } catch (error: any) {
         if (axios.isAxiosError(error)) {
             const errorMessage = error.response?.data?.message || "An error occurred";

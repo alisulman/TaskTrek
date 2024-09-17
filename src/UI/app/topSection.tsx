@@ -18,7 +18,7 @@ const TopSection = () => {
     }, 1000);
 
     return (
-        <div className='flex items-center gap-3 md:gap-6 py-4 md:p-4'>
+        <div className='flex items-center gap-3 md:gap-6 py-4 md:p-4 select-none'>
             {
                 time ? (
                     <div className='flex items-center -space-x-4 md:-space-x-5  -ml-4 md:ml-0 text-nowrap'>

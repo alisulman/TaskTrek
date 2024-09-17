@@ -5,7 +5,7 @@ import { RxCross2 } from "react-icons/rx";
 import { useDebounce } from "use-debounce";
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
-import { addList, fetchLists } from "@/redux/action/action.list";
+import { addList, deleteList, fetchLists, updateList } from "@/redux/action/action.list";
 
 interface Messages {
     add: string;
@@ -48,12 +48,23 @@ export default function InputCheck(
         setSpInpValue(e.target.value)
     }
     const handleClick = () => {
-        if(type === "add"){
-            dispatch(addList(value, data))
+        if (type === "add") {
+            dispatch(addList(debounceValue, data))
         }
+        if (type === "delete") {
+            dispatch(deleteList(value, data))
+        }
+        if (type === "update") {
+            dispatch(updateList(debounceValue, debounceValueTwo, data))
+        }
+        setValue("")
+        setSpInpValue("")
+        setSpInpMsg("")
+        setGoAhead(false)
+        setMsg({ add: "", update: "", delete: "" })
+        dispatch(setShowInputCheck(false))
         dispatch(fetchLists())
     }
-
     useEffect(() => {
         const checking = () => {
             const match = data.find(val => val.listName === debounceValue)
@@ -62,7 +73,6 @@ export default function InputCheck(
                 if (type === "update") {
                     if (match.listName === "professional" || match.listName === "personal") {
                         setMsg({ add: "", update: "this list neither delete nor edit", delete: "" })
-                        setProceed(false)
                     } else {
                         setMsg({ add: "", update: "List exist now update", delete: "" })
                         setGoAhead(true)
@@ -72,8 +82,8 @@ export default function InputCheck(
                                 setSpInpMsg("Same name is not allowed")
                                 setMsg({ add: "", update: "Same name is not allowed", delete: "" })
                             } else {
-                                setSpInpMsg("Nice One!")
                                 setMsg({ add: "", update: "List exist now update", delete: "" })
+                                setSpInpMsg("Nice One!")
                                 setProceed(true)
                             }
                         }
@@ -87,7 +97,7 @@ export default function InputCheck(
                         setMsg({ add: "", update: "", delete: "List exist now delete" })
                         setProceed(true)
                     }
-                } else setProceed(false)
+                }
 
             } else {
                 if (type === "add") {
