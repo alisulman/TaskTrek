@@ -3,7 +3,6 @@ import { Poppins, Protest_Guerrilla } from "next/font/google";
 export const PG = Protest_Guerrilla({
     subsets: ["latin"],
     weight: "400",
-    preload: true,
 });
 
 export const poppins = Poppins({
