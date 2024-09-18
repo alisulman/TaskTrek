@@ -1,10 +1,5 @@
-import { Poppins, Protest_Guerrilla } from "next/font/google";
+import { Poppins, Ribeye_Marrow } from "next/font/google";
 import localFont from "next/font/local";
-
-export const PG = localFont({
-    src: "../app/fonts/ProtestGuerrilla-Regular.ttf",
-    weight: "100 900",
-});
 
 export const poppins = Poppins({
     subsets: ["latin"],
@@ -12,11 +7,19 @@ export const poppins = Poppins({
     preload: true
 })
 
+export const RMFont = Ribeye_Marrow({
+    subsets: ["latin"],
+    weight: ["400"],
+    preload: true
+})
+
 export const geistSans = localFont({
     src: "../app/fonts/GeistVF.woff",
+    variable: "--font-geist-sans",
     weight: "100 900",
-});
-export const geistMono = localFont({
+  });
+  export const geistMono = localFont({
     src: "../app/fonts/GeistMonoVF.woff",
-    weight: "100 900"
-});
+    variable: "--font-geist-mono",
+    weight: "100 900",
+  });

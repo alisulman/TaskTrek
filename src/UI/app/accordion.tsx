@@ -3,7 +3,7 @@ import { AppDispatch } from "@/redux/store";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { FaCircle } from "react-icons/fa"
-import { ListModelFullType } from "@/Type/type";
+import { ListModelFullType, TodoModelFullType } from "@/Type/type";
 import clsx from "clsx";
 
 export default function Accordion(
@@ -31,7 +31,7 @@ export default function Accordion(
     )
 }
 
-const AccordionComponent = ({ value }) => {
+const AccordionComponent = ({ value }: {value: string}) => {
     const [checkedValues, setCheckedValues] = useState<string[]>([]);
     const handleCheck = (value: string) => {
         setCheckedValues((prev) => {
@@ -58,6 +58,7 @@ const AccordionComponent = ({ value }) => {
 
 export const AccordionTodo = () => {
     return (
-        <></>
+        <>
+        </>
     )
 }

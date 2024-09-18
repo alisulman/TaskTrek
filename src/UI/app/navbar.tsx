@@ -1,8 +1,8 @@
 import { VscLayoutSidebarLeft, VscLayoutSidebarLeftOff } from "react-icons/vsc";
-import { PG } from "../fonts";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { setShowLeft, setShowRight } from "@/redux/slice/slice.app";
+import { RMFont } from "../fonts";
 
 export default function Navbar(
     { className }: { className?: string }
@@ -32,7 +32,7 @@ export default function Navbar(
     return (
         <nav className={`navbar bg-primary-content flex justify-between items-center ${className}`}>
             <div className="flex flex-col items-start -space-y-1.5">
-                <h1 className={`${PG.className} antialiased text-2xl`}>
+                <h1 className={`${RMFont.className} antialiased text-2xl`}>
                     TaskTrek
                 </h1>
                 <button

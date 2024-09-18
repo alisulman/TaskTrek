@@ -12,6 +12,9 @@ export default function Page() {
         <div className="md:w-[55vw] md:h-svh">
             <TopSection />
             <SearchAdd />
+            <div>
+            <AccordionTodo />
+            </div>
         </div>
     );
 }

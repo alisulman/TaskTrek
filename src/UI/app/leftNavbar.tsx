@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Accordion from "./accordion";
 import { AppDispatch, RootState } from "@/redux/store";
 import clsx from "clsx";
-import { PG } from "../fonts";
 import InputCheck from "./inputCheck";
 import { FiPlus } from "react-icons/fi";
 import { RiDeleteRow } from "react-icons/ri";
@@ -12,6 +11,7 @@ import { Suspense, useEffect, useState } from "react";
 import { ListModelFullType } from "@/Type/type";
 import { getCookie, setCookie } from "@/lib/cookies";
 import { fetchLists } from "@/redux/action/action.list";
+import { RMFont } from "../fonts";
 
 const OneLefter = () => {
 
@@ -107,7 +107,7 @@ export default function LeftNavbar() {
 
             <nav className={`${!showLeft ? "hidden" : "flex"} md:flex h-[90vh] p-5 md:w-80 md:h-svh`}>
                 <div className="flex flex-col flex-grow space-y-3 md:space-y-4">
-                    <h1 className={`${PG.className} antialiased hidden text-center md:block bg-base-200 text-4xl rounded-lg py-3`}>
+                    <h1 className={`${RMFont.className} antialiased hidden text-center md:block bg-base-200 text-4xl rounded-lg py-3`}>
                         TaskTrek
                     </h1>
                     <Suspense fallback={<Skeleton amount={data.length > 5 ? 5 : data.length} />}>

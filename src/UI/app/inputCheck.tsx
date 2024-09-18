@@ -6,6 +6,7 @@ import { useDebounce } from "use-debounce";
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import { addList, deleteList, fetchLists, updateList } from "@/redux/action/action.list";
+import { ListModelFullType, TodoModelType } from "@/Type/type";
 
 interface Messages {
     add: string;
@@ -13,7 +14,7 @@ interface Messages {
     delete: string;
 }
 export default function InputCheck(
-    { className, type }: { className: string, type: string }
+    { className, type, setValues }: { className?: string, type: string, setValues?: React.Dispatch<React.SetStateAction<any>> }
 ) {
     const [value, setValue] = useState<string>("")
     const [spInpValue, setSpInpValue] = useState<string>("")
@@ -29,6 +30,7 @@ export default function InputCheck(
     const stateApp = useSelector((state: RootState) => state.APP)
     const data = state.data
     const show = stateApp.showInputCheck
+    const showDrawer = stateApp.drawerShow
     const dispatch = useDispatch<AppDispatch>()
 
     const handleClickToClose = () => {
@@ -67,9 +69,17 @@ export default function InputCheck(
     }
     useEffect(() => {
         const checking = () => {
-            const match = data.find(val => val.listName === debounceValue)
+            const match = data.find((val: ListModelFullType) => val.listName === debounceValue)
             if (match) {
-                if (type === "add") setMsg({ add: "List already exist choose different", update: "", delete: "" })
+                if (type === "add" || type === "form") {
+                    setMsg({ add: `${type === "form" ? "List exists" : "List already exist choose different"}`, update: "", delete: "" })
+                    if (setValues) {
+                        setValues((prevValues: TodoModelType) => ({
+                            ...prevValues,
+                            listName: debounceValue,
+                        }));
+                    }
+                }
                 if (type === "update") {
                     if (match.listName === "professional" || match.listName === "personal") {
                         setMsg({ add: "", update: "this list neither delete nor edit", delete: "" })
@@ -77,7 +87,7 @@ export default function InputCheck(
                         setMsg({ add: "", update: "List exist now update", delete: "" })
                         setGoAhead(true)
                         if (goAhead) {
-                            const matchTwo = data.find(val => val.listName === debounceValueTwo)
+                            const matchTwo = data.find((val: ListModelFullType) => val.listName === debounceValueTwo)
                             if (match.listName === matchTwo?.listName) {
                                 setSpInpMsg("Same name is not allowed")
                                 setMsg({ add: "", update: "Same name is not allowed", delete: "" })
@@ -100,8 +110,14 @@ export default function InputCheck(
                 }
 
             } else {
-                if (type === "add") {
+                if (type === "add" || type === "form") {
                     setMsg({ add: "Nice one!", update: "", delete: "" })
+                    if (setValues) {
+                        setValues((prevValues: TodoModelType) => ({
+                            ...prevValues,
+                            listName: debounceValue,
+                        }));
+                    }
                     setProceed(true)
                 } else setProceed(false)
                 if (type === "update") setMsg({ add: "", update: "List is not exist", delete: "" })
@@ -123,7 +139,13 @@ export default function InputCheck(
         setSpInpMsg("")
         setGoAhead(false)
         setMsg({ add: "", update: "", delete: "" })
-    }, [show, type])
+        if(type === "form" && setValues){
+            setValues((prevValues: TodoModelType) => ({
+                ...prevValues,
+                listName: "",
+            }))
+        }
+    }, [show, type, showDrawer])
 
     return (
         <div className={`relative ${msg ? "space-y-2" : "space-y-3"} ${className}`}>
@@ -131,12 +153,12 @@ export default function InputCheck(
                 type="text"
                 value={value.toLowerCase()}
                 onChange={handleChange}
-                className="text-sm w-full px-4 pr-12 py-2"
+                className={type === "form" ? "input input-bordered input-sm text-[#808c9c] my-1 rounded-none w-full max-w-xs" : "text-sm w-full px-4 pr-12 py-2"}
                 placeholder={type === "update" ? "Enter todo's list name for edit" : "Enter todo's list name"}
             />
             <h5 className={clsx("text-xs", { "hidden": !msg })}>
                 {
-                    type === "add"
+                    type === "add" || type === "form"
                         ? msg.add
                         : type === "update"
                             ? msg.update
@@ -158,13 +180,20 @@ export default function InputCheck(
                     <span className="select-none loading loading-spinner loading-xs"></span>
                 )}
                 <RxCross2
-                    className="cursor-pointer"
+                    className={type === "form" ? "hidden" : "cursor-pointer"}
                     onClick={handleClickToClose}
                 />
             </div>
             <button
                 type="button"
-                className={clsx(`capitalize bg-neutral text-neutral-content ${proceed ? "cursor-pointer" : "cursor-not-allowed"} w-full h-9`, { "opacity-25": !proceed })}
+                className={
+                    clsx(`capitalize bg-neutral text-neutral-content ${proceed
+                        ? "cursor-pointer"
+                        : "cursor-not-allowed"} w-full h-9`,
+                        { "opacity-25": !proceed },
+                        { "hidden": type === "form" },
+                    )
+                }
                 disabled={!proceed}
                 onClick={handleClick}
             >

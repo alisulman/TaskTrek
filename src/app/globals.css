@@ -7,3 +7,7 @@
         @apply overflow-hidden
     }
 }
+
+input[type="datetime-local"]::-webkit-datetime-edit {
+    color: #808c9c;
+}

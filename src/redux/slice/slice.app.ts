@@ -15,7 +15,8 @@ const initialState: AppSliceInitialStateType = {
     timePeriod: "",
     weekDay: "",
     monthName: "",
-    date: ""
+    date: "",
+    drawerShow: false
 }
 
 const AppSlice = createSlice({
@@ -69,6 +70,10 @@ const AppSlice = createSlice({
             state.weekDay = daysOfWeek[dateDay.getDay()]
             state.monthName = monthNames[dateDay.getMonth()]
         },
+        setDrawerShow: (state, action) => {
+            state.isLoading = false
+            state.drawerShow = action.payload
+        }
     }
 })
 
@@ -82,6 +87,7 @@ export const {
     setCurrentYear,
     setSelected,
     setTime,
+    setDrawerShow,
 } = AppSlice.actions;
 
 export default AppSlice.reducer;
