@@ -28,3 +28,43 @@ export const addTodo = (values: TodoModelType, data: TodoModelFullType[]) => asy
         }
     }
 }
+
+export const updateTodo = (id: string, values: TodoModelType, data: TodoModelFullType[]) => async (dispatch: AppDispatch) => {
+    dispatch(setLoading())
+
+    console.log("updating...", values)
+    try {
+        const response = await axios.put(`/api/todo/update-todo/${id}`, values)
+        const dataTodo = response.data.data
+        console.log("update", dataTodo)
+        const updateData = data.map(todo => todo._id === id ? dataTodo : todo)
+        dispatch(setTodoData(updateData))
+        setCookie("todos", updateData, 30, "/application")
+
+    } catch (error: any) {
+        if (axios.isAxiosError(error)) {
+            const errorMessage = error.response?.data?.message || "An error occurred";
+            dispatch(setError(errorMessage));
+        } else {
+            dispatch(setError(error.message || "An unknown error occurred."));
+        }
+    }
+}
+
+export const deleteTodo = (id: string, data: TodoModelFullType[]) => async (dispatch: AppDispatch) => {
+    dispatch(setLoading())
+
+    const deletedData: TodoModelFullType[] = data.filter(list => list._id !== id)
+    try {
+        dispatch(setTodoData(deletedData))
+        await axios.delete(`/api/todo/delete-todo/${id}`)
+        setCookie("todos", deletedData, 30, "/application")
+    } catch (error: any) {
+        if (axios.isAxiosError(error)) {
+            const errorMessage = error.response?.data?.message || "An error occurred";
+            dispatch(setError(errorMessage));
+        } else {
+            dispatch(setError(error.message || "An unknown error occurred."));
+        }
+    }
+}

@@ -16,7 +16,8 @@ const initialState: AppSliceInitialStateType = {
     weekDay: "",
     monthName: "",
     date: "",
-    drawerShow: false
+    drawerShow: false,
+    indexForEdit: null
 }
 
 const AppSlice = createSlice({
@@ -73,7 +74,11 @@ const AppSlice = createSlice({
         setDrawerShow: (state, action) => {
             state.isLoading = false
             state.drawerShow = action.payload
-        }
+        },
+        setIndexForEdit: (state, action) => {
+            state.isLoading = false
+            state.indexForEdit = action.payload
+        },
     }
 })
 
@@ -88,6 +93,7 @@ export const {
     setSelected,
     setTime,
     setDrawerShow,
+    setIndexForEdit
 } = AppSlice.actions;
 
 export default AppSlice.reducer;

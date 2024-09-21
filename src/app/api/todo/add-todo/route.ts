@@ -30,12 +30,12 @@ export const POST = async (req: NextRequest) => {
         if (!TagDetail) {
             const color = GenerateColor()
             const newTag = await MyList.create({ listName, color: color })
-            await MyList.findByIdAndUpdate({ _id: newTag?._id }, { $inc: { HavingTodo: 1 } })
+            await MyList.findByIdAndUpdate({ _id: newTag?._id }, { $inc: { todos: 1 } })
             const newTodo = await Todo.create({ title, description, dateTime, duration: convertDuration, priority, listName: newTag._id })
             id = newTodo._id as string
         } else {
             const newTodo = await Todo.create({ title, description, dateTime, duration: convertDuration, priority, listName: TagDetail._id })
-            await MyList.findOneAndUpdate({ listName }, { $inc: { HavingTodo: 1 } })
+            await MyList.findOneAndUpdate({ listName }, { $inc: { todos: 1 } })
             id = newTodo._id as string
         }
 

@@ -1,17 +1,21 @@
-import { setDrawerShow } from "@/redux/slice/slice.app"
+import { setDrawerShow, setIndexForEdit } from "@/redux/slice/slice.app"
 import { AppDispatch, RootState } from "@/redux/store"
 import clsx from "clsx"
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import InputCheck from "./inputCheck"
 import { TodoModelType } from "@/Type/type"
-import { addTodo } from "@/redux/action/todo.action"
+import { addTodo, updateTodo } from "@/redux/action/todo.action"
+import { convertFromSeconds } from "../../utils/time"
 
 const Drawer = ({ className, children }: { children: React.ReactNode, className?: string }) => {
     const state = useSelector((state: RootState) => state.APP)
     const showDrawer = state.drawerShow
     const dispatch = useDispatch<AppDispatch>()
-    const hanldeClick = () => dispatch(setDrawerShow(false))
+    const hanldeClick = () => {
+        dispatch(setDrawerShow(false))
+        dispatch(setIndexForEdit(null))
+    }
     return (
         <div
             className={clsx("absolute top-0 left-0 bg-black w-svw h-svh z-30 backdrop-blur-[2px] bg-opacity-5 cursor-pointer", { "hidden": !showDrawer })} onClick={hanldeClick}>
@@ -37,14 +41,20 @@ export default function FormTodo() {
     const stateApp = useSelector((state: RootState) => state.APP)
     const data = state.data
     const show = stateApp.drawerShow
+    const indexForEdit = stateApp.indexForEdit
     const dispatch = useDispatch<AppDispatch>()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, [e.target.name]: e.target.value })
     }
     const handleSubmit = () => {
-        console.log(values)
-        dispatch(addTodo(values, data))
+        if (indexForEdit != null) {
+            const id = data[indexForEdit]._id
+            dispatch(updateTodo(id, values, data))
+        } else {
+            console.log(values)
+            dispatch(addTodo(values, data))
+        }
         setValues({
             title: "",
             description: "",
@@ -66,6 +76,7 @@ export default function FormTodo() {
             listName: "",
             priority: "",
         })
+        dispatch(setIndexForEdit(null))
     }
     useEffect(() => {
         if (show) {
@@ -79,9 +90,22 @@ export default function FormTodo() {
             })
         }
     }, [show])
+    useEffect(() => {
+        if (indexForEdit != null) {
+            const dataTodo = data[indexForEdit]
+            setValues({
+                title: dataTodo.title,
+                description: dataTodo.description,
+                dateTime: dataTodo.dateTime,
+                duration: convertFromSeconds(dataTodo.duration),
+                listName: typeof dataTodo.listName === 'string' ? dataTodo.listName : dataTodo.listName.listName,
+                priority: dataTodo.priority,
+            })
+        }
+    }, [indexForEdit])
     return (
         <Drawer className="flex flex-col items-center gap-5 p-8">
-            <h2 className="text-2xl font-semibold uppercase tracking-widest">Add Todo</h2>
+            <h2 className="text-2xl font-semibold uppercase tracking-widest">{indexForEdit != null ? 'Update' : 'Add'} Todo</h2>
             <div className="form-control w-full max-w-xs space-y-4">
                 <label htmlFor="title" className="label-text">
                     Title
@@ -130,10 +154,12 @@ export default function FormTodo() {
                         className="input input-bordered input-sm text-[#808c9c] my-1 rounded-none w-full max-w-xs"
                     />
                 </label>
-                <label htmlFor="tag" className="label-text">
-                    List-Name
-                    <InputCheck type="form" setValues={setValues} />
-                </label>
+                {indexForEdit === null && (
+                    <label htmlFor="tag" className="label-text">
+                        List-Name
+                        <InputCheck type="form" setValues={setValues} />
+                    </label>
+                )}
                 <div className="text-xs flex flex-col gap-1">
                     <span className="label-text">Priority</span>
                     <div className="flex items-center text-[#808c9c] gap-5">

@@ -22,7 +22,7 @@ const TopSection = () => {
             {
                 time ? (
                     <div className='flex items-center -space-x-4 md:-space-x-5  -ml-4 md:ml-0 text-nowrap'>
-                        <h6 className='text-sm md:text-base -rotate-90 underline underline-offset-4 uppercase'>{weekday}</h6>
+                        <div className='text-sm md:text-base -rotate-90 underline underline-offset-4 uppercase'>{weekday}</div>
                         <div>
                             <h4 className='underline underline-offset-4 text-sm md:text-base'>
                                 {convertTimeIntoAMPM(time)}

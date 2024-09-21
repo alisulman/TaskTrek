@@ -38,18 +38,18 @@ const OneLefter = () => {
                     <Skeleton amount={5} />
                 </div>
             ) : (
-                <ul className={`space-y-3 p-4 ${data.length > 5 && "overflow-y-auto md:h-[17rem]"}`}>
+                <div className={`space-y-3 p-4 ${data.length > 5 && "overflow-y-auto md:h-[17rem]"}`}>
                     {data.map((data: ListModelFullType) => (
-                        <li
+                        <div
                             key={data._id}
                             className={clsx("flex justify-between items-center hover:bg-[#2b251e] active:bg-neutral rounded-lg px-4 py-2 cursor-pointer", {
                                 "bg-neutral text-neutral-content": active === data.listName,
                             })}
                         >
                             <Accordion list={data} />
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     )

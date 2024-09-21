@@ -17,6 +17,7 @@ export interface AppSliceInitialStateType {
     monthName: string | ""
     date: string | ""
     drawerShow: boolean
+    indexForEdit: number | null
 }
 
 export interface ListSliceInitialStateType {
@@ -46,7 +47,7 @@ export interface TodoModelType {
     description: string
     dateTime: string
     duration: string
-    listName: string
+    listName: string | ListModelFullType
     priority: string
 }
 export interface TodoModelFullType extends TodoModelType {

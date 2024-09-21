@@ -1,37 +1,62 @@
 
 export const convertTimeIntoAMPM = (time: string): string => {
-    const [crudeHour, crudeMinutes] = time.split(": ")
+    const [crudeHour, crudeMinutes] = time.split(":")
     const hour = Number(crudeHour) < 12
         ? Number(crudeHour) < 10
-            ? `0${crudeHour}`
+            ? `${crudeHour}`
             : crudeHour
         : Number(crudeHour) - 12 === 0
             ? `12`
             : Number(crudeHour) - 12 < 10
                 ? `0${Number(crudeHour) - 12}`
                 : `${Number(crudeHour) - 12}`
-    const minutes = Number(crudeMinutes) < 10 ? `0${crudeMinutes}` : crudeMinutes
+    const minutes = Number(crudeMinutes) < 10 ? `${crudeMinutes}` : crudeMinutes
     const ampm = Number(crudeHour) < 12 ? "AM" : "PM"
     return `${hour}:${minutes} ${ampm}`
 }
 
-export const convertIntoSeconds = (value: string): string => {
-    const splitedValue = value.split("")
-    const findHourExists = splitedValue.some((val: string) => val === "h")
-    if (findHourExists) {
-        const [hour, minutes] = value.split("-")
-        const convertHour = hour.replace('h', '*60')
-        const [val1h, val2h] = convertHour.split('*')
-        const totalHour = (Number(val1h) * Number(val2h)) * 60
-        const convertMinutes = minutes.replace('m', '*60')
-        const [val1m, val2m] = convertMinutes.split('*')
-        const totalMinutes = (Number(val1m) * Number(val2m))
-        const totalSeconds = totalHour + totalMinutes
-        return `${totalSeconds}`
+export const convertDateAndTime = (value: string): { date: string, time: string } => {
+    const [date, time] = value.split("T")
+    const getTime = convertTimeIntoAMPM(time)
+    return { date: date, time: getTime }
+}
+
+export const convertFromSeconds = (value: string): string => {
+    const totalSeconds = Number(value);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+    if (hours > 0 && minutes > 0) {
+        return `${hours}h-${minutes}m`;
+    } else if (hours > 0) {
+        return `${hours}h`;
+    } else if (minutes > 0) {
+        return `${minutes}m`;
     } else {
-        const convertMinutes = value.replace('m', '*60')
-        const [val1m, val2m] = convertMinutes.split('*')
-        const totalMinutes = (Number(val1m) * Number(val2m))
-        return `${totalMinutes}`
+        return "0m";
     }
+};
+
+export const convertIntoSeconds = (value: string): string => {
+    let totalSeconds = 0;
+
+    if (value.includes("h") && value.includes("m")) {
+        const [hourPart, minutePart] = value.split("-");
+        const hours = Number(hourPart.replace('h', '').trim()) || 0;
+        totalSeconds += hours * 3600;
+        const minutes = Number(minutePart.replace('m', '').trim()) || 0;
+        totalSeconds += minutes * 60;
+    }
+    else if (value.includes("h")) {
+        const hours = Number(value.replace('h', '').trim()) || 0;
+        totalSeconds += hours * 3600;
+    }
+    else if (value.includes("m")) {
+        const minutes = Number(value.replace('m', '').trim()) || 0;
+        totalSeconds += minutes * 60;
+    }
+    else {
+        return "Invalid format";
+    }
+    return totalSeconds.toString();
 }

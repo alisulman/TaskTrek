@@ -1,10 +1,9 @@
 import { setActiveSet } from "@/redux/slice/slice.app";
-import { AppDispatch } from "@/redux/store";
-import React, { useState } from "react";
+import { AppDispatch} from "@/redux/store";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { FaCircle } from "react-icons/fa"
-import { ListModelFullType, TodoModelFullType } from "@/Type/type";
-import clsx from "clsx";
+import { ListModelFullType} from "@/Type/type";
 
 export default function Accordion(
     { list }: { list: ListModelFullType }
@@ -27,38 +26,6 @@ export default function Accordion(
             <span className="text-xs text-center w-7 h-fit bg-info text-info-content rounded-full">
                 {list.todos}
             </span>
-        </>
-    )
-}
-
-const AccordionComponent = ({ value }: {value: string}) => {
-    const [checkedValues, setCheckedValues] = useState<string[]>([]);
-    const handleCheck = (value: string) => {
-        setCheckedValues((prev) => {
-            if (prev.includes(value)) {
-                return prev.filter((v) => v !== value);
-            } else {
-                return [value];
-            }
-        });
-    };
-    return (
-        <>
-            <input
-                type="checkbox"
-                value={value}
-                className="hidden"
-            />
-            <div className={clsx("bg-base-200 w-full h-20 cursor-pointer rounded-lg", {
-                "h-40": checkedValues.includes(value)
-            })} onClick={() => handleCheck(value)}></div>
-        </>
-    )
-}
-
-export const AccordionTodo = () => {
-    return (
-        <>
         </>
     )
 }
