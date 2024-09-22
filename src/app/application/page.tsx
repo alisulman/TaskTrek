@@ -17,7 +17,6 @@ export default function Page({ searchParams }: { searchParams?: { query?: string
 
     const state = useSelector((state: RootState) => state.TODO)
     const stateApp = useSelector((state: RootState) => state.APP)
-    const stateList = useSelector((state: RootState) => state.LIST)
     const dataTodo = state.data
     const open = stateApp.drawerShow
     const active = stateApp.activeSet
@@ -31,8 +30,8 @@ export default function Page({ searchParams }: { searchParams?: { query?: string
 
     useEffect(() => {
         if (selectedDate !== null) {
-            const filterData = dataTodo.filter(val => {
-                const fullDateTime: { date: string, time: string } = convertDateAndTime(val.dateTime);
+            const filterData = dataTodo.filter((val) => {
+                const fullDateTime: { date: string, time: string } = convertDateAndTime((val).dateTime);
                 const fullDate = fullDateTime.date.split("-");
                 const dayFromData = Number(fullDate[2]);
                 const isEqual = dayFromData === selectedDate;
@@ -41,22 +40,22 @@ export default function Page({ searchParams }: { searchParams?: { query?: string
 
             setData(filterData);
         } else if (active === "showall") {
-            const filterData = dataTodo.filter(val => !val.completed)
+            const filterData = dataTodo.filter((val) => !val.completed)
             setData(filterData)
         } else if (active === "completed") {
-            const filterData = dataTodo.filter(val => val.completed)
+            const filterData = dataTodo.filter((val) => val.completed)
             setData(filterData)
         } else if (activePri === "high" && active === "priority") {
-            const filterData = dataTodo.filter(val => val.priority === "high" && !val.completed)
+            const filterData = dataTodo.filter((val) => val.priority === "high" && !val.completed)
             setData(filterData)
         } else if (activePri === "medium" && active === "priority") {
-            const filterData = dataTodo.filter(val => val.priority === "medium" && !val.completed)
+            const filterData = dataTodo.filter((val) => val.priority === "medium" && !val.completed)
             setData(filterData)
         } else if (activePri === "low" && active === "priority") {
-            const filterData = dataTodo.filter(val => val.priority === "low" && !val.completed)
+            const filterData = dataTodo.filter((val) => val.priority === "low" && !val.completed)
             setData(filterData)
         } else {
-            const filterData = dataTodo.filter(val => ((typeof val.listName === "string" ? val.listName : val.listName.listName) === active) && !val.completed)
+            const filterData = dataTodo.filter((val) => ((typeof val.listName === "string" ? val.listName : val.listName.listName) === active) && !val.completed)
             setData(filterData)
         }
     }, [dataTodo, active, activePri])
@@ -71,8 +70,8 @@ export default function Page({ searchParams }: { searchParams?: { query?: string
         if(query !== ''){
             dispatch(setActiveSet('search'))
             const regx = new RegExp(query, 'i')
-            const filterData = dataTodo.filter(val => {
-                return regx.test(val.title)
+            const filterData = dataTodo.filter((val) => {
+                return regx.test((val).title)
             })
             setData(filterData)
         }

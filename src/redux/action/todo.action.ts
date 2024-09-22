@@ -18,12 +18,12 @@ export const addTodo = (values: TodoModelType, data: TodoModelFullType[]) => asy
         setCookie("todos", [...data, dataTodo], 30, "/application")
         setCookie("RunT", true, 1, "/application")
         setCookie("lists", dataList, 30, "/application")
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
             const errorMessage = error.response?.data?.message || "An error occurred";
             dispatch(setError(errorMessage));
         } else {
-            dispatch(setError(error.message || "An unknown error occurred."));
+            dispatch(setError((error as Error).message || "An unknown error occurred."));
         }
     }
 }
@@ -38,12 +38,12 @@ export const updateTodo = (id: string, values: TodoModelType, data: TodoModelFul
         dispatch(setTodoData(updateData))
         setCookie("todos", updateData, 30, "/application")
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
             const errorMessage = error.response?.data?.message || "An error occurred";
             dispatch(setError(errorMessage));
         } else {
-            dispatch(setError(error.message || "An unknown error occurred."));
+            dispatch(setError((error as Error).message || "An unknown error occurred."));
         }
     }
 }
@@ -60,12 +60,12 @@ export const deleteTodo = (id: string, data: TodoModelFullType[]) => async (disp
         dispatch(setListData(dataList))
         setCookie("todos", deletedData, 30, "/application")
         setCookie("lists", dataList, 30, "/application")
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
             const errorMessage = error.response?.data?.message || "An error occurred";
             dispatch(setError(errorMessage));
         } else {
-            dispatch(setError(error.message || "An unknown error occurred."));
+            dispatch(setError((error as Error).message || "An unknown error occurred."));
         }
     }
 }
@@ -86,12 +86,12 @@ export const updateComplete = (id: string) => async (dispatch: AppDispatch) => {
             setCookie("todos", data, 30, "/application")
             setCookie("lists", dataList, 30, "/application")
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
             const errorMessage = error.response?.data?.message || "An error occurred";
             dispatch(setError(errorMessage));
         } else {
-            dispatch(setError(error.message || "An unknown error occurred."));
+            dispatch(setError((error as Error).message || "An unknown error occurred."));
         }
     }
 }
