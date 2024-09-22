@@ -56,13 +56,13 @@ export const POST = async (req: NextRequest) => {
                 data: findIfadded
             }, { status: 201 }
         )
-    } catch (error: any) {
-        console.error(error.message)
+    } catch (error: unknown) {
+        console.error((error as Error).message)
         return NextResponse.json(
             {
                 success: false,
                 message: "Something went wrong",
-                error: error.message
+                error: (error as Error).message
             }, { status: 500 }
         )
     }

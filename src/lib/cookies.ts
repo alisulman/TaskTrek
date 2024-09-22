@@ -1,10 +1,10 @@
-export const setCookie = (name: string, value: any, days: number, path: string): void => {
+export const setCookie = (name: string, value: unknown, days: number, path: string): void => {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
     const cookieValue = encodeURIComponent(JSON.stringify(value));
     document.cookie = `${name}=${cookieValue}; expires=${expires}; path=${path}; Secure; SameSite=Strict`;
 }
 
-export const getCookie = (name: string): any | null => {
+export const getCookie = (name: string): unknown | null => {
     if (typeof document === 'undefined') {
         return null;
     }

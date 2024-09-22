@@ -19,11 +19,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { setDrawerShow, setIndexForEdit } from '@/redux/slice/slice.app';
 import { deleteTodo, updateComplete } from '@/redux/action/todo.action';
-import Todo from '@/models/todo.mode';
 
 const Accordion = styled((props: AccordionProps) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
+))(() => ({
     border: `1px solid #171618`,
     color: '#fff',
     '&:not(:last-child)': {

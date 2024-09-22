@@ -24,13 +24,13 @@ export const GET = async () => {
                 }, { status: 404 }
             )
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error(error)
         return NextResponse.json(
             {
                 success: false,
                 message: "Something went wrong",
-                error: error.message
+                error: (error as Error).message
             }, { status: 500 }
         )
     }

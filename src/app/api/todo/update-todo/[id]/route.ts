@@ -68,13 +68,13 @@ export const PUT = async (
                 data: findDataAgain
             }, { status: 200 }
         )
-    } catch (error: any) {
-        console.log(error.message)
+    } catch (error: unknown) {
+        console.log((error as Error).message)
         return NextResponse.json(
             {
                 success: false,
                 message: "Something went wrong",
-                error: error.message
+                error: (error as Error).message
             }, { status: 500 }
         )
     }

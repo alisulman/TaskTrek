@@ -14,7 +14,7 @@ interface Messages {
     delete: string;
 }
 export default function InputCheck(
-    { className, type, setValues }: { className?: string, type: string, setValues?: React.Dispatch<React.SetStateAction<any>> }
+    { className, type, setValues }: { className?: string, type: string, setValues?: React.Dispatch<React.SetStateAction<TodoModelType>> }
 ) {
     const [value, setValue] = useState<string>("")
     const [spInpValue, setSpInpValue] = useState<string>("")
@@ -139,7 +139,7 @@ export default function InputCheck(
         setSpInpMsg("")
         setGoAhead(false)
         setMsg({ add: "", update: "", delete: "" })
-        if(type === "form" && setValues){
+        if (type === "form" && setValues) {
             setValues((prevValues: TodoModelType) => ({
                 ...prevValues,
                 listName: "",

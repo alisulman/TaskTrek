@@ -6,7 +6,6 @@ import AccordionComponent from "@/UI/app/accordion.mui";
 import SearchAdd from "@/UI/app/searchAdd";
 import TopSection from "@/UI/app/topSection";
 import { convertDateAndTime } from "@/utils/time";
-import { selectClasses } from "@mui/material";
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +19,6 @@ export default function Page({ searchParams }: { searchParams?: { query?: string
     const stateApp = useSelector((state: RootState) => state.APP)
     const stateList = useSelector((state: RootState) => state.LIST)
     const dataTodo = state.data
-    const dataList = stateList.data
     const open = stateApp.drawerShow
     const active = stateApp.activeSet
     const selectedDate = stateApp.selected
