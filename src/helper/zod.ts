@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const TODOZODO = z.object({
-    title: z.string().min(3, "Title have min 3 letters").max(20, "Title have max 20 letters"),
+    title: z.string().min(3, "Title have min 3 letters"),
     description: z.string(),
     dateTime: z.string(),
     duration: z.string(),

@@ -62,20 +62,10 @@ export const convertIntoSeconds = (value: string): string => {
 }
 
 
-export const convertTimeStringToTimestamp = (timeString: string): number => {
-    const date = new Date();
-    const fullTime: {date: string, time: string} = convertDateAndTime(timeString)
-    const [time, modifier] = fullTime.time.split(/( AM| PM)/);
-    let [hours, minutes] = time.split(':').map(Number);
-    if (modifier === 'PM' && hours < 12) {
-        hours += 12
-    }
-    if (modifier === 'AM' && hours === 12) {
-        hours = 0;
-    }
-    date.setHours(hours);
-    date.setMinutes(minutes);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-    return date.getTime();
+export const convert24HourTimeStringToTimestamp = (timeString: string): number => {
+    const [date, time] = timeString.split('T')
+    const [year, month, day] = date.split('-').map(Number);
+    const [hours, minutes] = time.split(':').map(Number);
+    const fullDate = new Date(year, month - 1, day, hours, minutes, 0, 0);
+    return fullDate.getTime();
 }

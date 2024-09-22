@@ -12,13 +12,13 @@ import Typography from '@mui/material/Typography';
 import { TodoModelFullType } from '@/Type/type';
 import { FaCircle } from 'react-icons/fa';
 import { RxCounterClockwiseClock } from 'react-icons/rx';
-import { convertDateAndTime, convertTimeStringToTimestamp } from '@/utils/time';
+import { convert24HourTimeStringToTimestamp, convertDateAndTime } from '@/utils/time';
 import clsx from 'clsx';
 import { AccordionActions } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { setDrawerShow, setIndexForEdit } from '@/redux/slice/slice.app';
-import { deleteTodo } from '@/redux/action/todo.action';
+import { deleteTodo, updateComplete } from '@/redux/action/todo.action';
 import Todo from '@/models/todo.mode';
 
 const Accordion = styled((props: AccordionProps) => (
@@ -62,13 +62,23 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 const useAlarmer = (todo: TodoModelFullType, setComplete: React.Dispatch<React.SetStateAction<boolean>>) => {
     const [start, setStart] = React.useState<boolean>(false);
     const [count, setCount] = React.useState<number>(Number(todo.duration));
+    const [currentTime, setCurrentTime] = React.useState<number>(new Date().getTime());
+
+    const dispatch = useDispatch<AppDispatch>()
 
     React.useEffect(() => {
-        const currentTime = new Date().getTime();
-        const todoTime = convertTimeStringToTimestamp(todo.dateTime);
+        const intervalId = setInterval(() => {
+            setCurrentTime(new Date().getTime());
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    React.useEffect(() => {
+        const todoTime = convert24HourTimeStringToTimestamp(todo.dateTime);
         const timeDifference = todoTime - currentTime;
 
-        if (timeDifference <= 0) {
+        if (timeDifference <= 0 && !start) {
             setStart(true);
         } else {
             const timeId = setTimeout(() => {
@@ -77,7 +87,7 @@ const useAlarmer = (todo: TodoModelFullType, setComplete: React.Dispatch<React.S
 
             return () => clearTimeout(timeId);
         }
-    }, [todo]);
+    }, [todo, currentTime]);
 
     React.useEffect(() => {
         if (start && count > 0) {
@@ -87,8 +97,9 @@ const useAlarmer = (todo: TodoModelFullType, setComplete: React.Dispatch<React.S
 
             return () => clearInterval(countdownId);
         }
-        if (start && count === 0) {
+        if (start && count === 0 && !todo.completed) {
             setComplete(true);
+            dispatch(updateComplete(todo._id))
         }
     }, [start, count, setComplete]);
 
@@ -99,7 +110,9 @@ export default function AccordionComponent({ todo, index, expanded, handleChange
     const [complete, setComplete] = React.useState<boolean>(false);
 
     const state = useSelector((state: RootState) => state.TODO);
+    const stateApp = useSelector((state: RootState) => state.APP);
     const data = state.data;
+    const active = stateApp.activeSet;
     const dispatch = useDispatch<AppDispatch>();
     const { date, time } = convertDateAndTime(todo.dateTime);
 
@@ -116,7 +129,7 @@ export default function AccordionComponent({ todo, index, expanded, handleChange
 
     return (
         <>
-            {complete ? (
+            {((complete || todo.completed) && active !== "completed") ? (
                 <BasicAccordion expanded={false} onChange={() => { }} className="!bg-success !rounded-none">
                     <BasicSummary>
                         <div className="uppercase text-xl font-bold text-center w-full">
@@ -130,13 +143,16 @@ export default function AccordionComponent({ todo, index, expanded, handleChange
                         <div className="flex justify-between w-full">
                             <Typography className="!text-xl capitalize">{todo.title}</Typography>
                             <div className='flex items-center gap-5'>
-                                <Typography className='flex items-center gap-2 text-sm'>
-                                    <RxCounterClockwiseClock />
-                                    {start
-                                        ? ` ${count}s`
-                                        : ` ${todo.duration}s`
-                                    }
-                                </Typography>
+                                {active === "completed" ? (
+                                    <div className='bg-success text-success-content font-bold text-sm uppercase px-3 tracking-wider'>Compeleted</div>
+                                ) :
+                                    (<Typography className='flex items-center gap-2 text-sm'>
+                                        <RxCounterClockwiseClock />
+                                        {start
+                                            ? ` ${count}s`
+                                            : ` ${todo.duration}s`
+                                        }
+                                    </Typography>)}
                                 |
                                 <Typography className='flex items-center gap-2'>
                                     <FaCircle size={8} style={{ color: typeof todo.listName === 'object' && todo.listName !== null ? todo.listName.color : todo.listName }} />
@@ -179,8 +195,9 @@ export default function AccordionComponent({ todo, index, expanded, handleChange
                             Delete
                         </button>
                     </AccordionActions>
-                </Accordion>
-            )}
+                </Accordion >
+            )
+            }
         </>
     );
 }

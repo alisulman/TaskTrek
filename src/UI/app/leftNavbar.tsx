@@ -6,7 +6,7 @@ import InputCheck from "./inputCheck";
 import { FiPlus } from "react-icons/fi";
 import { RiDeleteRow } from "react-icons/ri";
 import { BiSolidEditAlt } from "react-icons/bi";
-import { setShowInputCheck } from "@/redux/slice/slice.app";
+import { setActiveSet, setShowInputCheck } from "@/redux/slice/slice.app";
 import { Suspense, useEffect, useState } from "react";
 import { ListModelFullType } from "@/Type/type";
 import { getCookie, setCookie } from "@/lib/cookies";
@@ -21,6 +21,10 @@ const OneLefter = () => {
     const active = stateApp.activeSet
     const data = stateList.data
     const dispatch = useDispatch<AppDispatch>()
+
+    const handleClick = (name: string) => {
+        dispatch(setActiveSet(name))
+    }
 
     useEffect(() => {
         const runCookie = getCookie("Run");
@@ -45,6 +49,7 @@ const OneLefter = () => {
                             className={clsx("flex justify-between items-center hover:bg-[#2b251e] active:bg-neutral rounded-lg px-4 py-2 cursor-pointer", {
                                 "bg-neutral text-neutral-content": active === data.listName,
                             })}
+                            onClick={() => handleClick(data.listName)}
                         >
                             <Accordion list={data} />
                         </div>

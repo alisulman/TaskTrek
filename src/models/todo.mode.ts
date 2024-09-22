@@ -30,10 +30,6 @@ const todoSchema: Schema<TodoModelSchemaType> = new Schema({
         type: Boolean,
         default: false
     },
-    missed: {
-        type: Boolean,
-        default: false
-    },
     listName: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "lists"

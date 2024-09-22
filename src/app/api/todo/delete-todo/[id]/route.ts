@@ -33,9 +33,10 @@ export const DELETE = async (
                 { status: 404 }
             );
         }
+        console.log(findByIdTodo)
         const deleteListById = await Todo.findByIdAndDelete(findByIdTodo._id);
         await MyList.findByIdAndUpdate(
-            {id: findByIdTodo.listName},
+            {_id: findByIdTodo.listName},
             {$inc: {todos: -1}},
             {new: true}
         )

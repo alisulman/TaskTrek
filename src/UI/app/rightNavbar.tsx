@@ -1,4 +1,4 @@
-import { setCurrentMonth, setCurrentYear, setSelected } from "@/redux/slice/slice.app"
+import { setActiveSet, setCurrentMonth, setCurrentYear, setSelected } from "@/redux/slice/slice.app"
 import { AppDispatch, RootState } from "@/redux/store"
 import clsx from "clsx"
 import { useEffect, useState } from "react"
@@ -22,6 +22,7 @@ const Calender = () => {
 
     const handleClick = (date: number) => {
         dispatch(setSelected(date))
+        dispatch(setActiveSet(date))
     }
 
     const renderCalenderDays = (): JSX.Element[] => {
@@ -42,7 +43,7 @@ const Calender = () => {
                         className={clsx(
                             'w-full aspect-auto p-2 text-center cursor-pointer',
                             {
-                                'bg-sky-800': isToday,
+                                'bg-neutral text-neutral-content': isToday,
                                 'bg-slate-700': selected !== updater.getDate() && selected === day,
                                 'hover:bg-slate-600': !isToday && selected !== day,
                             }
@@ -97,6 +98,7 @@ export default function RightNavbar() {
     const state = useSelector((state: RootState) => state.APP)
     const currentMonth = state.currentMonth
     const currentYear = state.currentYear
+    const active = state.activeSet
     const month = state.monthName
     const open = state.showRight
     const dispatch = useDispatch<AppDispatch>()
@@ -139,6 +141,58 @@ export default function RightNavbar() {
             </div>
             <div className="flex justify-center items-center bg-base-200 rounded-xl w-full h-72 px-4 py-2">
                 <Calender />
+            </div>
+            <div className="w-full bg-base-200 h-full rounded-xl p-8">
+                <div className="flex justify-between w-full">
+                    <button
+                        type="button"
+                        className={clsx("btn btn-sm btn-primary border-2 border-primary !rounded px-9", {
+                            "btn-neutral": active === "showall"
+                        })}
+                        onClick={() => {
+                            dispatch(setActiveSet("showall"))
+                            dispatch(setSelected(null))
+                        }}
+                    >
+                        Show All
+                    </button>
+                    <button
+                        type="button"
+                        className={clsx("btn btn-sm btn-primary border-2 border-primary !rounded px-9", {
+                            "btn-neutral": active === "search"
+                        })}
+                        onClick={() => {
+                            dispatch(setActiveSet("search"))
+                            dispatch(setSelected(null))
+                        }}
+                    >
+                        Search
+                    </button>
+                </div>
+                <button
+                    type="button"
+                    className={clsx("btn btn-sm btn-primary border-2 border-primary !rounded w-full my-3", {
+                        "btn-neutral": active === "completed"
+                    })}
+                    onClick={() => {
+                        dispatch(setActiveSet("completed"))
+                        dispatch(setSelected(null))
+                    }}
+                >
+                    Completed
+                </button>
+                <button
+                    type="button"
+                    className={clsx("btn btn-sm btn-primary border-2 border-primary !rounded w-full", {
+                        "btn-neutral": active === "priority"
+                    })}
+                    onClick={() => {
+                        dispatch(setActiveSet("priority"))
+                        dispatch(setSelected(null))
+                    }}
+                >
+                    Priority
+                </button>
             </div>
         </nav>
     )

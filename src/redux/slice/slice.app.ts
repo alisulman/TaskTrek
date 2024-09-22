@@ -10,7 +10,7 @@ const initialState: AppSliceInitialStateType = {
     showRight: false,
     currentMonth: new Date().getMonth(),
     currentYear: new Date().getFullYear(),
-    selected: new Date().getDate(),
+    selected: null,
     time: "",
     timePeriod: "",
     weekDay: "",

@@ -10,7 +10,7 @@ export interface AppSliceInitialStateType {
     showRight: boolean
     currentMonth: number
     currentYear: number
-    selected: number
+    selected: number | null
     time: string | ""
     timePeriod: string | ""
     weekDay: string | ""
@@ -49,6 +49,7 @@ export interface TodoModelType {
     dateTime: string
     duration: string
     listName: string | ListModelFullType
+    completed?: boolean
     priority: string
 }
 export interface TodoModelFullType extends TodoModelType {
@@ -63,5 +64,4 @@ export interface TodoModelSchemaType extends Document {
     listName: mongoose.Schema.Types.ObjectId
     priority: "low" | "medium" | "high"
     completed: boolean
-    missed: boolean
 }
