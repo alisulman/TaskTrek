@@ -11,7 +11,7 @@ import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function Page() {
+export default function Page({ searchParams }: { searchParams?: { query?: string } }) {
     const [data, setData] = useState<TodoModelFullType[]>([])
     const [expanded, setExpanded] = React.useState<string>("");
     const [activePri, setActivePri] = React.useState<string>("high");
@@ -25,6 +25,7 @@ export default function Page() {
     const active = stateApp.activeSet
     const selectedDate = stateApp.selected
     const dispatch = useDispatch<AppDispatch>()
+    const query = searchParams?.query || '';
 
     const handleChange = (panel: string) => {
         setExpanded(prev => (prev === panel ? "" : panel));
@@ -67,6 +68,17 @@ export default function Page() {
             setExpanded("")
         }
     }, [open])
+
+    useEffect(() => {
+        if(query !== ''){
+            dispatch(setActiveSet('search'))
+            const regx = new RegExp(query, 'i')
+            const filterData = dataTodo.filter(val => {
+                return regx.test(val.title)
+            })
+            setData(filterData)
+        }
+    }, [query])
 
     return (
         <div className="md:w-[55vw] md:h-svh">
