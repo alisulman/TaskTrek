@@ -18,6 +18,7 @@ export interface AppSliceInitialStateType {
     date: string | ""
     drawerShow: boolean
     indexForEdit: number | null
+    isComplete: boolean
 }
 
 export interface ListSliceInitialStateType {

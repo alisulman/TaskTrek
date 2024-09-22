@@ -2,6 +2,7 @@ import dbConnect from "@/lib/dbConnect"
 import MyList from "@/models/myLists.model"
 import Todo from "@/models/todo.mode"
 import { TodoModelType } from "@/Type/type"
+import { convertIntoSeconds } from "@/utils/time"
 import { NextRequest, NextResponse } from "next/server"
 
 export const PUT = async (
@@ -12,8 +13,7 @@ export const PUT = async (
 
     const { id } = params
     const { title, description, dateTime, duration, priority } = await req.json() as TodoModelType
-    console.log(title, description, dateTime, duration, priority)
-
+    
     try {
         if (!id) {
             return NextResponse.json(
@@ -36,19 +36,19 @@ export const PUT = async (
         }
 
         const findList = await MyList.findById({ _id: findData?.listName })
+        const convertDuration = convertIntoSeconds(duration)
         const updateListById = await Todo.findByIdAndUpdate(
             { _id: id },
             {
                 title,
                 description,
                 dateTime,
-                duration,
+                duration: convertDuration,
                 priority,
                 listName: findList?._id
             },
             { new: true, runValidators: true }
         )
-        console.log(updateListById)
 
         const findDataAgain = await Todo.findById({ _id: updateListById?._id }).populate("listName")
 

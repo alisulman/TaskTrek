@@ -17,7 +17,8 @@ const initialState: AppSliceInitialStateType = {
     monthName: "",
     date: "",
     drawerShow: false,
-    indexForEdit: null
+    indexForEdit: null,
+    isComplete: false
 }
 
 const AppSlice = createSlice({
@@ -79,6 +80,10 @@ const AppSlice = createSlice({
             state.isLoading = false
             state.indexForEdit = action.payload
         },
+        setIsComplete: (state, action) => {
+            state.isLoading = false
+            state.isComplete = action.payload
+        }
     }
 })
 
@@ -93,7 +98,8 @@ export const {
     setSelected,
     setTime,
     setDrawerShow,
-    setIndexForEdit
+    setIndexForEdit,
+    setIsComplete
 } = AppSlice.actions;
 
 export default AppSlice.reducer;

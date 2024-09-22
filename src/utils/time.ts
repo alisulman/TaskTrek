@@ -60,3 +60,22 @@ export const convertIntoSeconds = (value: string): string => {
     }
     return totalSeconds.toString();
 }
+
+
+export const convertTimeStringToTimestamp = (timeString: string): number => {
+    const date = new Date();
+    const fullTime: {date: string, time: string} = convertDateAndTime(timeString)
+    const [time, modifier] = fullTime.time.split(/( AM| PM)/);
+    let [hours, minutes] = time.split(':').map(Number);
+    if (modifier === 'PM' && hours < 12) {
+        hours += 12
+    }
+    if (modifier === 'AM' && hours === 12) {
+        hours = 0;
+    }
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date.getTime();
+}

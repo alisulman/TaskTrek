@@ -12,7 +12,9 @@ export default function Page() {
     const [expanded, setExpanded] = React.useState<string>("");
 
     const state = useSelector((state: RootState) => state.TODO)
+    const stateApp = useSelector((state: RootState) => state.APP)
     const dataTodo = state.data
+    const open = stateApp.drawerShow
 
     const handleChange = (panel: string) => {
         setExpanded(prev => (prev === panel ? "" : panel));
@@ -22,21 +24,36 @@ export default function Page() {
         setData(dataTodo)
     }, [dataTodo])
 
+    useEffect(() => {
+        if (!open) {
+            setExpanded("")
+        }
+    }, [open])
+
     return (
         <div className="md:w-[55vw] md:h-svh">
             <TopSection />
             <SearchAdd />
-            <div className="space-y-5 p-7">
-                {data.map((todo: TodoModelFullType, index) => (
-                    <AccordionComponent
-                        key={todo._id}
-                        todo={todo}
-                        index={index}
-                        expanded={expanded}
-                        handleChange={handleChange}
-                    />
-                ))}
-            </div>
+            {data.length === 0 ? (
+                <div>
+                    <span>No work added yet</span>
+                    <button type="button">Add new todo</button>
+                </div>
+            ): (
+                <div className = "space-y-5 p-7">
+            {data.map((todo: TodoModelFullType, index) => (
+            <AccordionComponent
+                key={todo._id}
+                todo={todo}
+                index={index}
+                expanded={expanded}
+                handleChange={handleChange}
+            />
+            ))}
         </div>
+    )
+}
+
+        </div >
     );
 }
