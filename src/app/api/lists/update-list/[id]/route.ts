@@ -1,9 +1,9 @@
 import dbConnect from "@/lib/dbConnect"
 import MyList from "@/models/myLists.model"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
 export const PUT = async (
-    req: Response,
+    req: NextRequest,
     { params }: { params: { id: string } }
 ) => {
     await dbConnect("Update List")
