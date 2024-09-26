@@ -65,3 +65,25 @@ export interface TodoModelSchemaType extends Document {
     priority: "low" | "medium" | "high"
     completed: boolean
 }
+
+export interface RegisterationType{
+    username?: string
+    email: string
+    password: string
+}
+export interface RegisterationSchemaType extends Document {
+    username: string
+    email: string
+    password: string
+    role: string
+    isActive: boolean
+    refreshToken: string
+}
+
+export interface RegisterationSchemaFullType extends RegisterationSchemaType{
+    _id: string
+}
+
+export interface JwtPayload {
+    id: string
+}
